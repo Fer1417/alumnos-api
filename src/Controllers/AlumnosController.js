@@ -7,21 +7,19 @@ const esquema = new mongoose.Schema({
 const AlumnosModel = mongoose.model('Alumnos', esquema)
 
 export const getAlumnos = async (req, res) => {
-    try {
-        const { id } = req.params;
-        let rows;
+    try{
+        const{id} = req.params
 
-        if (id === undefined) {
-            rows = await AlumnosModel.find();
-        } else {
-            rows = await AlumnosModel.findById(id);
-        }
+        const rows =
 
-        return res.status(200).json({ status: true, data: rows });
-    } catch(error) {
-        return res.status(500).json({ status: false, errors: [error] });
+        (id === undefined ) ? await AlumnoModel.find() : await AlumnoModel.findById(id)
+
+        return res.status(200).json({status:true,data:rows})
     }
-};
+    catch(error){
+        return res.status(500).json({status:false,errors:[error]})
+    }
+}
 
 
 export const saveAlumnos = async (req, res) => {
@@ -78,14 +76,14 @@ export const deleteAlumnos = async (req,res) => {
         return res.status(200).json({ status: true, message: 'Alumno eliminado' })
     }
     catch (error) {
-        return res.status(500).json({ status: false, errors: [error.message] });
+        return res.status(500).json({ status: false, errors: [error.message] })
     }
 }
 
 const eliminarImagen = async(id) => {
     const alumnos = await AlumnosModel.findById(id)
     const foto = alumnos.foto
-    fs.unlinkSync('./public/'+foto)
+    fs.unlinkSync('./public'+foto)
 }
 
 const validar = (escuela, matricula, alumno, carrera, semestre, fecha_nacimiento, foto, sevalida) => {
